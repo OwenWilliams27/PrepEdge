@@ -1,0 +1,1360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PrepEdge — Interview Coach</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #0f2137;
+    --navy-mid: #1a3352;
+    --navy-light: #264a6e;
+    --teal: #0d9e87;
+    --teal-light: #12c4a8;
+    --teal-pale: #e0f7f4;
+    --gold: #e8a020;
+    --gold-light: #fdf3e0;
+    --white: #ffffff;
+    --gray-50: #f7f8fa;
+    --gray-100: #eef0f4;
+    --gray-200: #dde1e9;
+    --gray-400: #8f9aaa;
+    --gray-600: #4a5568;
+    --gray-800: #1e2937;
+    --text: #1e2937;
+    --text-muted: #5a6880;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --shadow: 0 2px 12px rgba(0,0,0,0.08);
+    --shadow-md: 0 4px 24px rgba(0,0,0,0.12);
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--gray-50);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  /* NAV */
+  nav {
+    background: var(--navy);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.2);
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+
+  .logo-mark {
+    width: 36px;
+    height: 36px;
+    background: var(--teal);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    color: white;
+    letter-spacing: -1px;
+  }
+
+  .logo-text {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    color: white;
+    letter-spacing: 0.3px;
+  }
+
+  .logo-text span { color: var(--teal-light); }
+
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 4px;
+  }
+
+  nav ul li a, nav ul li button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.75);
+    text-decoration: none;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  nav ul li a:hover, nav ul li button:hover { background: rgba(255,255,255,0.08); color: white; }
+  nav ul li a.active, nav ul li button.active { background: rgba(13,158,135,0.2); color: var(--teal-light); }
+
+  /* PAGES */
+  .page { display: none; animation: fadeIn 0.3s ease; }
+  .page.active { display: block; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 60%, #0d2e4a 100%);
+    padding: 5rem 2rem 4rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 320px; height: 320px;
+    background: radial-gradient(circle, rgba(13,158,135,0.12) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: -40px;
+    width: 240px; height: 240px;
+    background: radial-gradient(circle, rgba(232,160,32,0.08) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(13,158,135,0.15);
+    border: 1px solid rgba(13,158,135,0.3);
+    color: var(--teal-light);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 6px 14px;
+    border-radius: 100px;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.2rem, 5vw, 3.4rem);
+    color: white;
+    line-height: 1.15;
+    margin-bottom: 1rem;
+    max-width: 680px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero h1 em { color: var(--teal-light); font-style: normal; }
+
+  .hero p {
+    font-size: 17px;
+    color: rgba(255,255,255,0.65);
+    max-width: 520px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.7;
+  }
+
+  /* MAIN LAYOUT */
+  .container { max-width: 900px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+  .container-wide { max-width: 1100px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+
+  /* CARDS */
+  .card {
+    background: white;
+    border-radius: var(--radius);
+    border: 1px solid var(--gray-200);
+    padding: 1.75rem;
+    box-shadow: var(--shadow);
+  }
+
+  .card-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.15rem;
+    color: var(--navy);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card-title .icon {
+    width: 32px; height: 32px;
+    background: var(--teal-pale);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+  }
+
+  /* FORM ELEMENTS */
+  label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 6px;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+  }
+
+  input[type="text"], textarea, select {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    color: var(--text);
+    background: white;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    outline: none;
+  }
+
+  input[type="text"]:focus, textarea:focus, select:focus {
+    border-color: var(--teal);
+    box-shadow: 0 0 0 3px rgba(13,158,135,0.12);
+  }
+
+  textarea { resize: vertical; min-height: 160px; line-height: 1.6; }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+  .form-group { margin-bottom: 1rem; }
+  .form-group:last-child { margin-bottom: 0; }
+
+  /* BUTTONS */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    border: none;
+    text-decoration: none;
+  }
+
+  .btn-primary {
+    background: var(--teal);
+    color: white;
+  }
+
+  .btn-primary:hover { background: #0b8a76; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(13,158,135,0.35); }
+  .btn-primary:active { transform: translateY(0); }
+
+  .btn-primary:disabled { background: var(--gray-400); cursor: not-allowed; transform: none; box-shadow: none; }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--navy);
+    border: 1.5px solid var(--gray-200);
+  }
+  .btn-outline:hover { border-color: var(--teal); color: var(--teal); }
+
+  .btn-sm { padding: 8px 16px; font-size: 13px; }
+
+  /* RESULTS */
+  .results-grid { display: grid; gap: 1.25rem; margin-top: 1.5rem; }
+
+  .result-section {
+    background: white;
+    border-radius: var(--radius);
+    border: 1px solid var(--gray-200);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+
+  .result-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 1rem 1.5rem;
+    background: var(--gray-50);
+    border-bottom: 1px solid var(--gray-200);
+  }
+
+  .result-header-icon {
+    width: 34px; height: 34px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .result-header-icon.teal { background: var(--teal-pale); }
+  .result-header-icon.gold { background: var(--gold-light); }
+  .result-header-icon.navy { background: #e8eef5; }
+
+  .result-header h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1rem;
+    color: var(--navy);
+  }
+
+  .result-header p { font-size: 12px; color: var(--text-muted); }
+
+  .result-body { padding: 1.5rem; }
+
+  /* STAR STORIES */
+  .star-story {
+    background: var(--gray-50);
+    border-radius: var(--radius-sm);
+    border-left: 3px solid var(--teal);
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .star-story:last-child { margin-bottom: 0; }
+
+  .star-story h4 {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--navy);
+    margin-bottom: 0.75rem;
+  }
+
+  .star-labels { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem; }
+
+  .star-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 100px;
+  }
+
+  .star-label.s { background: #e8f0ff; color: #2a5ac7; }
+  .star-label.t { background: #fff3e0; color: #b36b00; }
+  .star-label.a { background: #e8f7ee; color: #1a7940; }
+  .star-label.r { background: #fce8f0; color: #b02860; }
+
+  .star-text { font-size: 14px; color: var(--gray-600); line-height: 1.7; }
+  .star-text strong { color: var(--navy); }
+
+  /* TIPS LIST */
+  .tip-item {
+    display: flex;
+    gap: 10px;
+    padding: 0.875rem 0;
+    border-bottom: 1px solid var(--gray-100);
+    font-size: 14px;
+    color: var(--gray-600);
+    line-height: 1.6;
+  }
+
+  .tip-item:last-child { border-bottom: none; padding-bottom: 0; }
+
+  .tip-num {
+    width: 22px; height: 22px;
+    background: var(--navy);
+    color: white;
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* QUESTIONS LIST */
+  .q-item {
+    display: flex;
+    gap: 10px;
+    padding: 0.875rem 0;
+    border-bottom: 1px solid var(--gray-100);
+    font-size: 14px;
+    color: var(--gray-600);
+    line-height: 1.6;
+    align-items: flex-start;
+  }
+
+  .q-item:last-child { border-bottom: none; }
+
+  .q-mark {
+    color: var(--teal);
+    font-weight: 700;
+    font-size: 16px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* LOADING */
+  .loading-state {
+    text-align: center;
+    padding: 3rem 2rem;
+    display: none;
+  }
+
+  .loading-state.visible { display: block; }
+
+  .spinner {
+    width: 44px; height: 44px;
+    border: 3px solid var(--gray-200);
+    border-top-color: var(--teal);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    margin: 0 auto 1rem;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .loading-text { font-size: 14px; color: var(--text-muted); }
+  .loading-sub { font-size: 12px; color: var(--gray-400); margin-top: 4px; }
+
+  /* ERROR */
+  .error-banner {
+    background: #fff0f0;
+    border: 1px solid #fbbdbd;
+    border-radius: var(--radius-sm);
+    padding: 1rem 1.25rem;
+    font-size: 14px;
+    color: #b91c1c;
+    display: none;
+    margin-top: 1rem;
+  }
+
+  .error-banner.visible { display: block; }
+
+  /* FIELD GUIDE PAGE */
+  .field-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .field-tab {
+    padding: 9px 20px;
+    border-radius: 100px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1.5px solid var(--gray-200);
+    background: white;
+    color: var(--gray-600);
+    transition: all 0.15s;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .field-tab:hover { border-color: var(--teal); color: var(--teal); }
+  .field-tab.active { background: var(--navy); color: white; border-color: var(--navy); }
+
+  .field-content { display: none; }
+  .field-content.active { display: block; animation: fadeIn 0.25s ease; }
+
+  .guide-section { margin-bottom: 2rem; }
+
+  .guide-section h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.1rem;
+    color: var(--navy);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--teal-pale);
+  }
+
+  .trait-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; }
+
+  .trait-card {
+    background: white;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--gray-200);
+    padding: 1rem 1.25rem;
+  }
+
+  .trait-card h4 { font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 4px; }
+  .trait-card p { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+
+  .trait-icon { font-size: 20px; margin-bottom: 8px; display: block; }
+
+  .skill-pill {
+    display: inline-block;
+    background: var(--teal-pale);
+    color: var(--teal);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 100px;
+    margin: 3px;
+  }
+
+  .skill-pill.gold { background: var(--gold-light); color: #8a5a00; }
+  .skill-pill.navy { background: #e8eef5; color: var(--navy-light); }
+
+  .question-bank-item {
+    background: var(--gray-50);
+    border-radius: var(--radius-sm);
+    padding: 0.875rem 1rem;
+    margin-bottom: 0.625rem;
+    font-size: 14px;
+    color: var(--gray-600);
+    border-left: 3px solid transparent;
+    transition: border-color 0.15s;
+  }
+
+  .question-bank-item:hover { border-left-color: var(--teal); }
+
+  .question-bank-item .tag {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+
+  /* EMPTY STATE */
+  .empty-state {
+    text-align: center;
+    padding: 3rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .empty-icon {
+    width: 56px; height: 56px;
+    background: var(--teal-pale);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin-bottom: 0.5rem;
+  }
+
+  .empty-state h3 { font-family: 'DM Serif Display', serif; color: var(--navy); font-size: 1.1rem; }
+  .empty-state p { font-size: 14px; color: var(--text-muted); max-width: 360px; }
+
+  /* CHECKLIST */
+  .checklist-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 0.5rem 0;
+    font-size: 14px;
+    color: var(--gray-600);
+  }
+
+  .check-icon {
+    width: 18px; height: 18px;
+    background: var(--teal);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .check-icon svg { width: 10px; height: 10px; stroke: white; }
+
+  /* SECTION DIVIDER */
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+  }
+
+  /* COPY BTN */
+  .copy-btn {
+    background: none;
+    border: 1px solid var(--gray-200);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 12px;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.15s;
+  }
+
+  .copy-btn:hover { border-color: var(--teal); color: var(--teal); }
+
+  /* HIGHLIGHT BOX */
+  .highlight-box {
+    background: linear-gradient(135deg, #e8f7f4, #f0faf8);
+    border: 1px solid rgba(13,158,135,0.2);
+    border-radius: var(--radius-sm);
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+    font-size: 14px;
+    color: var(--gray-600);
+  }
+
+  .highlight-box strong { color: var(--teal); }
+
+  @media (max-width: 640px) {
+    .form-row { grid-template-columns: 1fr; }
+    .hero { padding: 3rem 1.25rem 2.5rem; }
+    .hero h1 { font-size: 2rem; }
+    nav ul li a span, nav ul li button span { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="logo">
+    <div class="logo-mark">P</div>
+    <span class="logo-text">Prep<span>Edge</span></span>
+  </a>
+  <ul>
+    <li><button class="active" id="nav-coach" onclick="showPage('coach')">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      <span>AI Coach</span>
+    </button></li>
+    <li><button id="nav-guide" onclick="showPage('guide')">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+      <span>Field Guide</span>
+    </button></li>
+  </ul>
+</nav>
+
+<!-- ==================== AI COACH PAGE ==================== -->
+<div class="page active" id="page-coach">
+
+  <div class="hero">
+    <div class="hero-badge">
+      <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      Powered by ChatGPT
+    </div>
+    <h1>Nail Your Next <em>Interview</em></h1>
+    <p>Paste a job description and get tailored STAR stories, standout strategies, and smart questions — in seconds.</p>
+  </div>
+
+  <div class="container">
+    <!-- INPUT FORM -->
+    <div class="card" style="margin-bottom: 1.5rem;">
+      <div class="card-title">
+        <div class="icon">📋</div>
+        Job Description
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="job-title">Job Title</label>
+          <input type="text" id="job-title" placeholder="e.g. Business Analyst, Supply Chain Coordinator" />
+        </div>
+        <div class="form-group">
+          <label for="company">Company Name</label>
+          <input type="text" id="company" placeholder="e.g. Amazon, Boeing, Microsoft" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="jd-text">Paste Job Description</label>
+        <textarea id="jd-text" placeholder="Paste the full job posting here. Include responsibilities, qualifications, and any skills mentioned — the more detail, the better your tailored prep!"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="background">Your Background (Optional)</label>
+        <input type="text" id="background" placeholder="e.g. MIS major, Amazon internship, SQL + Python experience, 3.6 GPA" />
+      </div>
+
+      <div style="display:flex; gap:0.75rem; align-items:center; flex-wrap:wrap; margin-top:0.5rem;">
+        <button class="btn btn-primary" id="generate-btn" onclick="generatePrep()">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          Generate My Prep
+        </button>
+        <button class="btn btn-outline" onclick="clearAll()">Clear</button>
+        <span id="char-count" style="font-size:12px; color:var(--text-muted); margin-left:auto;"></span>
+      </div>
+
+      <div class="error-banner" id="error-banner"></div>
+    </div>
+
+    <!-- LOADING -->
+    <div class="loading-state" id="loading">
+      <div class="spinner"></div>
+      <div class="loading-text">Analyzing job description...</div>
+      <div class="loading-sub" id="loading-sub">Crafting your personalized prep materials</div>
+    </div>
+
+    <!-- RESULTS -->
+    <div class="results-grid" id="results" style="display:none;">
+
+      <!-- STANDOUT TIPS -->
+      <div class="result-section">
+        <div class="result-header">
+          <div class="result-header-icon teal">🎯</div>
+          <div>
+            <h3>How to Stand Out</h3>
+            <p>Tailored to this role & company</p>
+          </div>
+        </div>
+        <div class="result-body" id="standout-content"></div>
+      </div>
+
+      <!-- STAR STORIES -->
+      <div class="result-section">
+        <div class="result-header">
+          <div class="result-header-icon gold">⭐</div>
+          <div>
+            <h3>STAR Story Frameworks</h3>
+            <p>Behavioral interview answers for this role</p>
+          </div>
+        </div>
+        <div class="result-body" id="star-content"></div>
+      </div>
+
+      <!-- QUESTIONS TO ASK -->
+      <div class="result-section">
+        <div class="result-header">
+          <div class="result-header-icon navy">💬</div>
+          <div>
+            <h3>Questions to Ask Them</h3>
+            <p>Smart questions that show genuine interest</p>
+          </div>
+        </div>
+        <div class="result-body" id="questions-content"></div>
+      </div>
+
+    </div>
+
+    <!-- EMPTY STATE -->
+    <div class="empty-state" id="empty-state">
+      <div class="empty-icon">✨</div>
+      <h3>Ready when you are</h3>
+      <p>Fill in the job details above and click "Generate My Prep" to get your personalized interview materials.</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ==================== FIELD GUIDE PAGE ==================== -->
+<div class="page" id="page-guide">
+  <div class="hero" style="padding:3.5rem 2rem 3rem;">
+    <div class="hero-badge">
+      <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+      Field-specific insights
+    </div>
+    <h1>The Insider's <em>Field Guide</em></h1>
+    <p>What interviewers really look for in MIS, Business Analytics, and Supply Chain candidates.</p>
+  </div>
+
+  <div class="container-wide">
+    <div class="field-tabs">
+      <button class="field-tab active" onclick="showField('mis')">🖥️ MIS</button>
+      <button class="field-tab" onclick="showField('ba')">📊 Business Analytics</button>
+      <button class="field-tab" onclick="showField('sc')">🚚 Supply Chain</button>
+    </div>
+
+    <!-- MIS -->
+    <div class="field-content active" id="field-mis">
+      <div class="guide-section">
+        <h3>What MIS Interviewers Are Really Looking For</h3>
+        <div class="highlight-box">
+          <strong>The core signal:</strong> MIS candidates who win are those who speak <em>both</em> languages — technical enough to earn developer trust, business-minded enough to earn leadership trust. Prove you're the bridge.
+        </div>
+        <div class="trait-grid">
+          <div class="trait-card">
+            <span class="trait-icon">🔗</span>
+            <h4>Business-Tech Translation</h4>
+            <p>Ability to take a business problem and articulate it in technical terms (and vice versa). This is the #1 differentiator.</p>
+          </div>
+          <div class="trait-card">
+            <span class="trait-icon">🗄️</span>
+            <h4>Data Literacy</h4>
+            <p>Comfort with databases, SQL, and data flows. Be ready to discuss how data moves through systems.</p>
+          </div>
+          <div class="trait-card">
+            <span class="trait-icon">📐</span>
+            <h4>Systems Thinking</h4>
+            <p>Understanding how components of a system interact. Process mapping and workflow analysis are key.</p>
+          </div>
+          <div class="trait-card">
+            <span class="trait-icon">👥</span>
+            <h4>Stakeholder Management</h4>
+            <p>Ability to gather requirements, manage expectations, and communicate across technical and non-technical teams.</p>
+          </div>
+          <div class="trait-card">
+            <span class="trait-icon">🔄</span>
+            <h4>Adaptability to Change</h4>
+            <p>Tech stacks change fast. Show you learn new tools quickly and embrace process improvement.</p>
+          </div>
+          <div class="trait-card">
+            <span class="trait-icon">📋</span>
+            <h4>Project Execution</h4>
+            <p>Delivery mindset. Can you take ownership of an initiative from requirements to go-live?</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="guide-section">
+        <h3>Skills to Highlight (and How to Talk About Them)</h3>
+        <div style="margin-bottom:1rem;">
+          <div class="section-label">Technical — lead with these</div>
+          <div>
+            <span class="skill-pill">SQL / Database Design</span>
+            <span class="skill-pill">ERP Systems (SAP, Oracle)</span>
+            <span class="skill-pill">Python / Automation</span>
+            <span class="skill-pill">Power BI / Tableau</span>
+            <span class="skill-pill">API Integrations</span>
+            <span class="skill-pill">Agile / Scrum</span>
+            <span class="skill-pill">Process Mapping (BPMN)</span>
+          </div>
+        </div>
+        <div style="margin-bottom:1rem;">
+          <div class="section-label">Soft skills — weave into STAR stories</div>
+          <div>
+            <span class="skill-pill gold">Requirements Gathering</span>
+            <span class="skill-pill gold">Cross-functional Communication</span>
+            <span class="skill-pill gold">Documentation & Training</span>
+            <span class="skill-pill gold">Problem Decomposition</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="guide-section">
+        <h3>Common MIS Interview Questions</h3>
+        <div class="question-bank-item">
+          <div class="tag">Systems Thinking</div>
+          "Describe a time you identified a process inefficiency and proposed a technical solution."
+        </div>
+        <div class="question-bank-item">
+          <div class="tag">Stakeholder Communication</div>
+          "How do you explain a technical concept to a non-technical audience? Give an example."
+        </div>
+        <div class="question-bank-item">
+          <div class="tag">Data & Databases</div>
+          "Walk me through a project where you worked with data. What tools did you use and what did you find?"
+        </div>
+        <div class="question-bank-item">
+          <div class="tag">Project Delivery</div>
+          "Tell me about a time a project hit an unexpected obstacle. How did you handle it?"
+        </div>
+        <div class="question-bank-item">
+          <div class="tag">Technical Curiosity</div>
+          "What emerging technology do you think will most impact [this industry] in the next 3 years?"
+        </div>
+        <div class="question-bank-item">
+          <div class="tag">Change Management</div>
+          "Describe a time you had to get stakeholders to adopt a new system or process."
+        </div>
+      </div>
+
+      <div class="guide-section">
+        <h3>Red Flags to Avoid</h3>
+        <div class="checklist-item" style="color:var(--gray-600);">
+          <div class="check-icon" style="background:#ef4444;"><svg fill="none" stroke="white" stroke-width="3" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></div>
+          <span>Being all-tech, no business — "I built X" without explaining the business impact</span>
+        </div>
+        <div class="checklist-item" style="color:var(--gray-600);">
+          <div class="check-icon" style="background:#ef4444;"><svg fill="none" stroke="white" stroke-width="3" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></div>
+          <span>Vague answers — "I worked on a team that improved a system" (no ownership, no metrics)</span>
+        </div>
+        <div class="checklist-item" style="color:var(--gray-600);">
+          <div class="check-icon" style="background:#ef4444;"><svg fill="none" stroke="white" stroke-width="3" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></div>
+          <span>Not knowing the tech stack — research what tools the company uses before the interview</span>
+        </div>
+        <div class="checklist-item" style="color:var(--gray-600);">
+          <div class="check-icon" style="background:#ef4444;"><svg fill="none" stroke="white" stroke-width="3" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></div>
+          <span>No curiosity — MIS roles reward people who are genuinely interested in how systems work</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- BUSINESS ANALYTICS -->
+    <div class="field-content" id="field-ba">
+      <div class="guide-section">
+        <h3>What Analytics Interviewers Are Really Looking For</h3>
+        <div class="highlight-box">
+          <strong>The core signal:</strong> Analytics candidates win by showing they don't just find patterns — they drive decisions. Every analysis story should end with "and here's what the business did with it."
+        </div>
+        <div class="trait-grid">
+          <div class="trait-card">
+            <span class="trait-icon">🎯</span>
+            <h4>Insight → Action</h4>
+            <p>Anyone can make a chart. Show that your analysis actually changed a decision or process.</p>
+          </div>
+          <div class="trait-card">
+            <span class="trait-icon">🔍</span>
+            <h4>Analytical Curiosity</h4>
+            <p>Interviewers want people who naturally ask "why?" when they see a number. Demonstrate this instinct.</p>
+          </div>
+          <div class="trait-card">
+            <span class="trait-icon">📢</span>
+            <h4>Data Storytelling</h4>
+            <p>Translating complex findings into clear narratives for decision-makers. Visuals matter, but story matters more.</p>
+          </div>
+          <div class="trait-card">
+            <span class="trait-icon">✅</span>
+            <h4>Data Quality Mindset</h4>
+            <p>Proactively questioning data integrity, handling edge cases, and flagging issues before they reach stakeholders.</p>
+          </div>
+          <div class="trait-card">
+            <span class="trait-icon">🧪</span>
+            <h4>Experimental Thinking</h4>
+            <p>Understanding A/B testing, hypothesis formation, and how to design analyses that answer specific business questions.</p>
+          </div>
+          <div class="trait-card">
+            <span class="trait-icon">⚙️</span>
+            <h4>Tool Proficiency</h4>
+            <p>Hands-on speed with SQL, Excel, Python/R, and at least one BI tool. Be ready for a live case study.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="guide-section">
+        <h3>Skills to Highlight (and How to Talk About Them)</h3>
+        <div style="margin-bottom:1rem;">
+          <div class="section-label">Technical — lead with these</div>
+          <div>
+            <span class="skill-pill">SQL (joins, CTEs, window functions)</span>
+            <span class="skill-pill">Python (pandas, numpy)</span>
+            <span class="skill-pill">Power BI / Tableau</span>
+            <span class="skill-pill">Excel / Advanced Pivot Tables</span>
+            <span class="skill-pill">Statistical Analysis (R)</span>
+            <span class="skill-pill">A/B Testing</span>
+            <span class="skill-pill">Machine Learning Basics</span>
+          </div>
+        </div>
+        <div style="margin-bottom:1rem;">
+          <div class="section-label">Soft skills — weave into STAR stories</div>
+          <div>
+            <span class="skill-pill gold">Executive Presentation</span>
+            <span class="skill-pill gold">Hypothesis-Driven Thinking</span>
+            <span class="skill-pill gold">Prioritization</span>
+            <span class="skill-pill gold">Business Acumen</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="guide-section">
+        <h3>Common Business Analytics Interview Questions</h3>
+        <div class="question-bank-item">
+          <div class="tag">Core Analytical Thinking</div>
+          "Walk me through a time you used data to solve a business problem. What was your process?"
+        </div>
+        <div class="question-bank-item">
+          <div class="tag">SQL / Technical</div>
+          "How would you identify top-performing products using just a transactions table?" (Be ready for live SQL)
+        </div>
+        <div class="question-bank-item">
+          <div class="tag">Data Storytelling</div>
+          "How do you present findings to stakeholders who aren't data-literate? Give an example."
+        </div>
+        <div class="question-bank-item">
+          <div class="tag">Ambiguity & Prioritization</div>
+          "If you had 3 analysis requests and 1 day, how would you decide what to work on?"
+        </div>
+        <div class="question-bank-item">
+          <div class="tag">Experimentation</div>
+          "How would you design a test to determine if a new feature improved user retention?"
+        </div>
+        <div class="question-bank-item">
+          <div class="tag">Data Quality</div>
+          "You pull data and notice anomalies. Walk me through how you'd investigate."
+        </div>
+      </div>
+
+      <div class="guide-section">
+        <h3>Red Flags to Avoid</h3>
+        <div class="checklist-item" style="color:var(--gray-600);">
+          <div class="check-icon" style="background:#ef4444;"><svg fill="none" stroke="white" stroke-width="3" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></div>
+          <span>Describing analysis with no business outcome — always quantify the impact you enabled</span>
+        </div>
+        <div class="checklist-item" style="color:var(--gray-600);">
+          <div class="check-icon" style="background:#ef4444;"><svg fill="none" stroke="white" stroke-width="3" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></div>
+          <span>Overclaiming ML/AI proficiency you can't back up technically — stick to what you genuinely know</span>
+        </div>
+        <div class="checklist-item" style="color:var(--gray-600);">
+          <div class="check-icon" style="background:#ef4444;"><svg fill="none" stroke="white" stroke-width="3" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></div>
+          <span>Only showing academic projects — try to reference any real or internship work, however small</span>
+        </div>
+        <div class="checklist-item" style="color:var(--gray-600);">
+          <div class="check-icon" style="background:#ef4444;"><svg fill="none" stroke="white" stroke-width="3" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></div>
+          <span>Skipping the "so what" — ending with "the chart showed X" instead of "the team decided to..."</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUPPLY CHAIN -->
+    <div class="field-content" id="field-sc">
+      <div class="guide-section">
+        <h3>What Supply Chain Interviewers Are Really Looking For</h3>
+        <div class="highlight-box">
+          <strong>The core signal:</strong> Supply chain is about trade-offs under constraint. Interviewers want to see you can balance speed, cost, and quality — and that you've actually managed something through to execution.
+        </div>
+        <div class="trait-grid">
+          <div class="trait-card">
+            <span class="trait-icon">⚖️</span>
+            <h4>Trade-off Decision Making</h4>
+            <p>Speed vs. cost, inventory vs. service level. Show you understand there's rarely a perfect answer.</p>
+          </div>
+          <div class="trait-card">
+            <span class="trait-icon">🔢</span>
+            <h4>Operations & Metrics Fluency</h4>
+            <p>Know your KPIs: fill rate, OTIF, days of inventory, lead time, shrink. Use them naturally in conversation.</p>
+          </div>
+          <div class="trait-card">
+            <span class="trait-icon">📦</span>
+            <h4>End-to-End Thinking</h4>
+            <p>Understand how procurement, warehousing, logistics, and demand planning connect. Don't be siloed.</p>
+          </div>
+          <div class="trait-card">
+            <span class="trait-icon">🚨</span>
+            <h4>Problem-Solving Under Pressure</h4>
+            <p>Disruptions happen. Show you stay calm, gather data fast, and escalate with solutions — not just problems.</p>
+          </div>
+          <div class="trait-card">
+            <span class="trait-icon">🤝</span>
+            <h4>Cross-functional Collaboration</h4>
+            <p>Supply chain touches everyone. Strong candidates show experience influencing without authority.</p>
+          </div>
+          <div class="trait-card">
+            <span class="trait-icon">📈</span>
+            <h4>Continuous Improvement</h4>
+            <p>Kaizen mindset. Always looking for waste, inefficiency, and process gaps — and doing something about them.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="guide-section">
+        <h3>Skills to Highlight (and How to Talk About Them)</h3>
+        <div style="margin-bottom:1rem;">
+          <div class="section-label">Technical — lead with these</div>
+          <div>
+            <span class="skill-pill">Excel / Data Analysis</span>
+            <span class="skill-pill">ERP Systems (SAP, Oracle)</span>
+            <span class="skill-pill">SQL for Operations Data</span>
+            <span class="skill-pill">Demand Forecasting</span>
+            <span class="skill-pill">Inventory Management</span>
+            <span class="skill-pill">Lean / Six Sigma Basics</span>
+            <span class="skill-pill">WMS / TMS Familiarity</span>
+          </div>
+        </div>
+        <div style="margin-bottom:1rem;">
+          <div class="section-label">Soft skills — weave into STAR stories</div>
+          <div>
+            <span class="skill-pill gold">Vendor / Supplier Relations</span>
+            <span class="skill-pill gold">Root Cause Analysis</span>
+            <span class="skill-pill gold">Escalation Judgment</span>
+            <span class="skill-pill gold">Written SOPs & Documentation</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="guide-section">
+        <h3>Common Supply Chain Interview Questions</h3>
+        <div class="question-bank-item">
+          <div class="tag">Operational Problem-Solving</div>
+          "Tell me about a time you identified a bottleneck or inefficiency in a process. What did you do?"
+        </div>
+        <div class="question-bank-item">
+          <div class="tag">Metrics & Analysis</div>
+          "How would you determine if our inventory levels are appropriate? What data would you look at?"
+        </div>
+        <div class="question-bank-item">
+          <div class="tag">Pressure & Urgency</div>
+          "Describe a time you had to solve a critical issue under time pressure. Walk me through your process."
+        </div>
+        <div class="question-bank-item">
+          <div class="tag">Cross-functional Work</div>
+          "Tell me about a time you had to influence a team or department that didn't report to you."
+        </div>
+        <div class="question-bank-item">
+          <div class="tag">Vendor & Supplier</div>
+          "Have you ever managed a relationship with a vendor or external partner? How did you handle a disagreement?"
+        </div>
+        <div class="question-bank-item">
+          <div class="tag">Continuous Improvement</div>
+          "What's an example of a process improvement you identified and implemented? What was the result?"
+        </div>
+      </div>
+
+      <div class="guide-section">
+        <h3>Red Flags to Avoid</h3>
+        <div class="checklist-item" style="color:var(--gray-600);">
+          <div class="check-icon" style="background:#ef4444;"><svg fill="none" stroke="white" stroke-width="3" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></div>
+          <span>Only speaking in theory — supply chain hiring managers want operational stories, not textbook definitions</span>
+        </div>
+        <div class="checklist-item" style="color:var(--gray-600);">
+          <div class="check-icon" style="background:#ef4444;"><svg fill="none" stroke="white" stroke-width="3" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></div>
+          <span>Not knowing key metrics — if you can't define OTIF, fill rate, or lead time, study them before interviews</span>
+        </div>
+        <div class="checklist-item" style="color:var(--gray-600);">
+          <div class="check-icon" style="background:#ef4444;"><svg fill="none" stroke="white" stroke-width="3" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></div>
+          <span>Blaming suppliers or teammates without showing your own ownership of the outcome</span>
+        </div>
+        <div class="checklist-item" style="color:var(--gray-600);">
+          <div class="check-icon" style="background:#ef4444;"><svg fill="none" stroke="white" stroke-width="3" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></div>
+          <span>Generic answers — "I'm a hard worker who loves problem-solving" needs to be backed by a specific story</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const MESSAGES_PLACEHOLDER = [
+    "Analyzing job requirements...",
+    "Crafting tailored STAR stories...",
+    "Generating standout strategies...",
+    "Writing smart questions to ask...",
+  ];
+
+  function showPage(page) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    document.getElementById('page-' + page).classList.add('active');
+    document.getElementById('nav-' + page).classList.add('active');
+  }
+
+  function showField(field) {
+    document.querySelectorAll('.field-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.field-content').forEach(c => c.classList.remove('active'));
+    document.getElementById('field-' + field).classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  const jdText = document.getElementById('jd-text');
+  const charCount = document.getElementById('char-count');
+
+  jdText.addEventListener('input', () => {
+    const len = jdText.value.length;
+    charCount.textContent = len > 0 ? `${len} chars` : '';
+  });
+
+  function clearAll() {
+    document.getElementById('job-title').value = '';
+    document.getElementById('company').value = '';
+    document.getElementById('jd-text').value = '';
+    document.getElementById('background').value = '';
+    document.getElementById('results').style.display = 'none';
+    document.getElementById('empty-state').style.display = 'flex';
+    document.getElementById('error-banner').classList.remove('visible');
+    charCount.textContent = '';
+  }
+
+  function setLoading(on) {
+    document.getElementById('loading').classList.toggle('visible', on);
+    document.getElementById('generate-btn').disabled = on;
+    if (on) {
+      document.getElementById('results').style.display = 'none';
+      document.getElementById('empty-state').style.display = 'none';
+    }
+  }
+
+  function showError(msg) {
+    const el = document.getElementById('error-banner');
+    el.textContent = msg;
+    el.classList.add('visible');
+  }
+
+  function hideError() {
+    document.getElementById('error-banner').classList.remove('visible');
+  }
+
+  let loadingInterval;
+  function startLoadingMessages() {
+    let i = 0;
+    const sub = document.getElementById('loading-sub');
+    sub.textContent = MESSAGES_PLACEHOLDER[0];
+    loadingInterval = setInterval(() => {
+      i = (i + 1) % MESSAGES_PLACEHOLDER.length;
+      sub.textContent = MESSAGES_PLACEHOLDER[i];
+    }, 2200);
+  }
+
+  function stopLoadingMessages() {
+    clearInterval(loadingInterval);
+  }
+
+  async function generatePrep() {
+    const title = document.getElementById('job-title').value.trim();
+    const company = document.getElementById('company').value.trim();
+    const jd = document.getElementById('jd-text').value.trim();
+    const bg = document.getElementById('background').value.trim();
+
+    hideError();
+
+    if (!jd && !title) {
+      showError('Please enter at least a job title or paste a job description to get started.');
+      return;
+    }
+
+    setLoading(true);
+    startLoadingMessages();
+
+    const systemPrompt = `You are PrepEdge, an expert interview coach for recent college graduates entering MIS (Management Information Systems), Business Analytics, or Supply Chain roles. Your job is to produce highly specific, actionable interview prep materials based on the provided job description.
+
+Return your response as a valid JSON object with exactly this structure:
+{
+  "standout": [
+    { "tip": "short tip title", "detail": "2-3 sentence actionable explanation" }
+  ],
+  "star": [
+    {
+      "title": "behavioral question this story answers",
+      "situation": "1-2 sentences setting the scene",
+      "task": "1 sentence describing your responsibility",
+      "action": "2-3 sentences of specific actions taken",
+      "result": "1-2 sentences with quantified or concrete outcome"
+    }
+  ],
+  "questions": [
+    { "category": "short category label", "question": "the full question to ask the interviewer" }
+  ]
+}
+
+Rules:
+- standout: exactly 4-5 items, each tailored to this specific role and company
+- star: exactly 3 STAR stories, each mapped to a likely behavioral question for this specific role. Make them feel realistic for a recent grad — internships, academic projects, club leadership, and part-time work are all valid experiences. Be specific and include realistic metrics.
+- questions: exactly 6 questions the candidate should ask. Mix of role-specific, team culture, growth, and company-direction questions.
+- Be concrete and specific. Avoid generic advice that could apply to any job.
+- Respond ONLY with the JSON object, no markdown fences, no preamble.`;
+
+    const userMsg = `Job Title: ${title || 'Not specified'}
+Company: ${company || 'Not specified'}
+Candidate Background: ${bg || 'Recent college graduate in MIS, Business Analytics, or Supply Chain'}
+
+Job Description:
+${jd || 'No job description provided — generate based on the job title and company.'}`;
+
+    try {
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer YOUR-OPENAI-KEY-HERE'
+        },
+        body: JSON.stringify({
+          model: 'gpt-4o',
+          max_tokens: 1500,
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: userMsg }
+          ]
+        })
+      });
+
+      if (!response.ok) {
+        const err = await response.json().catch(() => ({}));
+        throw new Error(err.error?.message || `API error ${response.status}`);
+      }
+
+      const data = await response.json();
+      const rawText = data.choices[0].message.content.trim();
+
+      let parsed;
+      try {
+        const cleaned = rawText.replace(/```json|```/g, '').trim();
+        parsed = JSON.parse(cleaned);
+      } catch (e) {
+        throw new Error('Could not parse the AI response. Please try again.');
+      }
+
+      renderResults(parsed, title, company);
+
+    } catch (err) {
+      showError('Something went wrong: ' + (err.message || 'Please try again.'));
+      document.getElementById('empty-state').style.display = 'flex';
+    } finally {
+      setLoading(false);
+      stopLoadingMessages();
+    }
+  }
+
+  function renderResults(data, title, company) {
+    // STANDOUT
+    const standoutEl = document.getElementById('standout-content');
+    standoutEl.innerHTML = '';
+    if (data.standout && data.standout.length) {
+      data.standout.forEach((item, i) => {
+        const div = document.createElement('div');
+        div.className = 'tip-item';
+        div.innerHTML = `<div class="tip-num">${i + 1}</div><div><strong style="color:var(--navy);display:block;margin-bottom:2px;">${escHtml(item.tip)}</strong>${escHtml(item.detail)}</div>`;
+        standoutEl.appendChild(div);
+      });
+    }
+
+    // STAR
+    const starEl = document.getElementById('star-content');
+    starEl.innerHTML = '';
+    if (data.star && data.star.length) {
+      data.star.forEach(story => {
+        const div = document.createElement('div');
+        div.className = 'star-story';
+        div.innerHTML = `
+          <h4>${escHtml(story.title)}</h4>
+          <div class="star-labels">
+            <span class="star-label s">Situation</span>
+            <span class="star-label t">Task</span>
+            <span class="star-label a">Action</span>
+            <span class="star-label r">Result</span>
+          </div>
+          <div class="star-text">
+            <strong>Situation:</strong> ${escHtml(story.situation)}<br>
+            <strong>Task:</strong> ${escHtml(story.task)}<br>
+            <strong>Action:</strong> ${escHtml(story.action)}<br>
+            <strong>Result:</strong> ${escHtml(story.result)}
+          </div>`;
+        starEl.appendChild(div);
+      });
+    }
+
+    // QUESTIONS
+    const qEl = document.getElementById('questions-content');
+    qEl.innerHTML = '';
+    if (data.questions && data.questions.length) {
+      data.questions.forEach(q => {
+        const div = document.createElement('div');
+        div.className = 'q-item';
+        div.innerHTML = `<div class="q-mark">?</div><div><span style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);margin-bottom:3px;">${escHtml(q.category)}</span>${escHtml(q.question)}</div>`;
+        qEl.appendChild(div);
+      });
+    }
+
+    document.getElementById('results').style.display = 'grid';
+    document.getElementById('empty-state').style.display = 'none';
+    document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function escHtml(str) {
+    if (!str) return '';
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+</script>
+</body>
+</html>
